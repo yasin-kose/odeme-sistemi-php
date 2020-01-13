@@ -1,0 +1,28 @@
+{
+    "name": "ankapix/odeme-sistemi",
+    "license": "MIT",
+    "description": "Garanti Bankası ve EST destekleyen bankalar (İş Bankası, Akbank, Finansbank, Halk Bankası, KuveytTürk,, Garanti, BankAsya, Vakıfbank, Yapı Kredi ve Anadolubank) için Sanal Pos sınıfları.",
+    "keywords": ["sanalpos", "online pos"],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "authors": [
+        {
+            "name": "Yasin Köse",
+            "email": "yasin.kose@outlook.com.tr"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "mockery/mockery": "dev-master@dev"
+    },
+    "autoload": {
+        "files": [
+            "posnet/PosnetXML/posnet.php",
+            "posnet/PosnetOOS/posnet_oos.php"
+        ],
+        "psr-0": {
+            "SanalPos": "src/",
+            "Est": "Est/"
+        }
+    }
+}
