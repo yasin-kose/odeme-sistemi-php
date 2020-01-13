@@ -29,13 +29,36 @@ class SanalPosResponseEst implements SanalPosResponseInterface, SanalPos3DRespon
             $this->is3D = true;
         } catch (\Exception $exception) {
         }
-
-        try {
-            $this->xml = new SimpleXMLElement($response);
-        } catch (\Exception $exception) {
-            $this->is3D = true;
-        }
+		if($this->isValidXml($response)){
+			try {
+				$this->xml = new SimpleXMLElement($response);
+			} catch (\Exception $exception) {
+				$this->is3D = true;
+			}
+		}else{
+				$this->is3D = true;
+		}
+        
     }
+	
+	function isValidXml($content)
+	{
+		$content = trim($content);
+		if (empty($content)) {
+			return false;
+		}
+		//html go to hell!
+		if (stripos($content, '<!DOCTYPE html>') !== false) {
+			return false;
+		}
+
+		libxml_use_internal_errors(true);
+		simplexml_load_string($content);
+		$errors = libxml_get_errors();          
+		libxml_clear_errors();  
+
+		return empty($errors);
+	}
 
     public function success()
     {

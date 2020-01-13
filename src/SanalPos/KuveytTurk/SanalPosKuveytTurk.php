@@ -79,6 +79,12 @@ class SanalPosKuveytTurk extends SanalPosBase implements SanalPosInterface, Sana
         return $this;
     }
 
+    function starts_with ($string, $startString) 
+    { 
+        $len = strlen($startString); 
+        return (substr($string, 0, $len) === $startString); 
+    } 
+
     /**
      * @param bool        $pre        bu değişken kullanılmıyor ve ne işe yarıyor inan hiç bilmiyorum
      * @param null|string $successUrl yalnızca 3d ödeme yapılacaksa gerekli
@@ -103,7 +109,7 @@ class SanalPosKuveytTurk extends SanalPosBase implements SanalPosInterface, Sana
             .'<MerchantId>'.$this->merchantId.'</MerchantId>'
             .'<CustomerId>'.$this->customerId.'</CustomerId>'
             .'<UserName>'.$this->username.'</UserName>'
-            .'<CardType>'.(starts_with($this->card['number'], 5) ? 'MasterCard' : 'VISA').'</CardType>'
+            .'<CardType>'.($this->starts_with($this->card['number'], 5) ? 'MasterCard' : 'VISA').'</CardType>'
             .'<CardHolderName>'.$this->card['card_holder_name'].'</CardHolderName>'
             .'<CardNumber>'.$this->card['number'].'</CardNumber>'
             .'<CardExpireDateYear>'.$expiryYear.'</CardExpireDateYear>'
@@ -185,6 +191,23 @@ class SanalPosKuveytTurk extends SanalPosBase implements SanalPosInterface, Sana
      */
     public function provision3d(array $postData)
     {
+		$AuthenticationResponse=$postData["AuthenticationResponse"]; 
+		$RequestContent = urldecode($AuthenticationResponse); 
+		try {
+			$xxml=simplexml_load_string($RequestContent); 
+			$Amount = $xxml->VPosMessage->Amount[0];
+		}catch (\Exception $exception) {
+            return [
+                'success' => false,
+                'message' => 'Ödeme başarısız, daha sonra tekrar deneyiniz.#1'
+            ];
+        }
+		if(!in_array($xxml->ResponseCode[0], ['00','200']){
+			return [
+                'success' => false,
+                'message' => 'Ödeme başarısız, daha sonra tekrar deneyiniz.#2'
+            ];
+		}
         $this->order['total'] = (int) $this->order['total'] * 100;
         $orderId = $this->order['orderId'];
 
@@ -194,7 +217,7 @@ class SanalPosKuveytTurk extends SanalPosBase implements SanalPosInterface, Sana
 
 //        $HashData = $postData['HashData'];
 
-        $xml = '<KuveytTurkVPosMessage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+       echo $xml = '<KuveytTurkVPosMessage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 				<APIVersion>1.0.0</APIVersion>
 				<HashData>'.$HashData.'</HashData>
 				<MerchantId>'.$this->merchantId.'</MerchantId>
@@ -202,18 +225,17 @@ class SanalPosKuveytTurk extends SanalPosBase implements SanalPosInterface, Sana
 				<UserName>'.$this->username.'</UserName>
 				<TransactionType>Sale</TransactionType>
 				<InstallmentCount>0</InstallmentCount>
-				<Amount>'.$postData['VPosMessage']->Amount.'</Amount>
+				<Amount>'.$Amount.'</Amount>
 				<MerchantOrderId>'.$this->order['orderId'].'</MerchantOrderId>
 				<TransactionSecurity>3</TransactionSecurity>
 				<KuveytTurkVPosAdditionalData>
-				<AdditionalData>
-					<Key>MD</Key>
-					<Data>'.$postData['MD'].'</Data>
-				</AdditionalData>
-			</KuveytTurkVPosAdditionalData>
+					<AdditionalData>
+						<Key>MD</Key>
+						<Data>'.$xxml->MD[0].'</Data>
+					</AdditionalData>
+				</KuveytTurkVPosAdditionalData>
 			</KuveytTurkVPosMessage>';
 
-        \Log::debug($xml);
         try {
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -247,7 +269,18 @@ class SanalPosKuveytTurk extends SanalPosBase implements SanalPosInterface, Sana
                 'message' => $exception->getMessage(),
             ];
         }
-
+		
+		 if ($xxml->IsEnrolled[0]=='true' and $xxml->ResponseCode[0]=='00') {
+				return [
+					'status' => true,
+					'message' => $xxml->ResponseMessage[0],
+				];
+         }else{
+			  return [
+                        'status' => false,
+                        'message' => $xxml->ResponseMessage[0],
+                    ];
+		 }
         return $xxml;
     }
 
