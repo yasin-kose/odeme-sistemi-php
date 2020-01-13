@@ -29,8 +29,6 @@ class SanalPosEst extends SanalPosBase implements SanalPosInterface, SanalPos3DI
         'isbank_3d' => 'spos.isbank.com.tr',
         'akbank' => 'www.sanalakpos.com',
         'akbank_3d' => 'www.sanalakpos.com',
-        'finansbank' => 'www.fbwebpos.com',
-        'finansbank_3d' => 'www.fbwebpos.com',
         'halkbank' => 'sanalpos.halkbank.com.tr',
         'halkbank_3d' => 'sanalpos.halkbank.com.tr',
         'anadolubank' => 'anadolusanalpos.est.com.tr',

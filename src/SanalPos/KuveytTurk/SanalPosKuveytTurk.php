@@ -202,7 +202,7 @@ class SanalPosKuveytTurk extends SanalPosBase implements SanalPosInterface, Sana
                 'message' => 'Ödeme başarısız, daha sonra tekrar deneyiniz.#1'
             ];
         }
-		if(!in_array($xxml->ResponseCode[0], ['00','200']){
+		if(!in_array($xxml->ResponseCode[0], ['00','200'])){
 			return [
                 'success' => false,
                 'message' => 'Ödeme başarısız, daha sonra tekrar deneyiniz.#2'
@@ -217,7 +217,7 @@ class SanalPosKuveytTurk extends SanalPosBase implements SanalPosInterface, Sana
 
 //        $HashData = $postData['HashData'];
 
-       echo $xml = '<KuveytTurkVPosMessage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+       $xml = '<KuveytTurkVPosMessage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 				<APIVersion>1.0.0</APIVersion>
 				<HashData>'.$HashData.'</HashData>
 				<MerchantId>'.$this->merchantId.'</MerchantId>
