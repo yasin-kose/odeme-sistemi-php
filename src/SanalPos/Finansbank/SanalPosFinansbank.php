@@ -68,6 +68,19 @@ class SanalPosFinansbank extends SanalPosBase implements SanalPosInterface, Sana
         return $this->server;
     }
 
+
+    public function postAuth($orderId)
+    {
+    }
+
+    public function cancel($orderId)
+    {
+    }
+
+    public function refund($orderId, $amount = null)
+    {
+    }
+    
     /**
      * @param bool        $pre     
      * @param null|string $successUrl yalnızca 3d ödeme yapılacaksa gerekli
