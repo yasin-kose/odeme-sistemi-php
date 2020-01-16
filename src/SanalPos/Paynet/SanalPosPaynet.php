@@ -30,7 +30,7 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
     }
 
 
-    public function getServer()
+    public function getServer() 
     {
     }
     /**
