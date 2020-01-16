@@ -5,28 +5,22 @@
  * Bu yardımcı sınıf ile Paynet API'yi PHP projelerinizde kolayca kullanabilirsiniz
  * 
  * */
-
-
 class PaynetClient
 {
-	
 	private $ApiKey;
 	private $PaynetUrl;
 	private $json_result;
 	
-	
 	//adreslerin sonu slaş ile bitmeli
 	const testUrl = 'https://pts-api.paynet.com.tr/';
 	const liveUrl = 'https://api.paynet.com.tr/';
-	
-	
 	
 	/**
 	 * Yapıcı metod, secret keyi girmek için kullanılıyor
 	 * @param string $ApiKey
 	 * @param bool $isLive Canlı için true, test için false girilmeli
 	 */
-	public function PaynetClient($ApiKey, $isLive = false)
+	public function __construct($ApiKey, $isLive = false)
 	{
 		$this->ApiKey = $ApiKey;
 		
@@ -35,11 +29,6 @@ class PaynetClient
 		else
 			$this->PaynetUrl = self::liveUrl;
 	}
-	
-	
-	
-	
-	
 
 	/**
 	 * Paynet apisinden sorgu yapıp cevabı JSON olarak alan metod
@@ -80,7 +69,6 @@ class PaynetClient
 		}		
     }
 	
-	
 	/**
 	* Karttan para çekim işlemi yapan metod
 	* @param Three3DPaymentParameters $param
@@ -93,7 +81,6 @@ class PaynetClient
 		$sonuc->fillFromJson($this->json_result);
 		return $sonuc;
 	}
-	
 	
 	/**
 	* Karttan para çekim işlemi yapan metod
@@ -108,9 +95,6 @@ class PaynetClient
 		return $sonuc;
 	}
 	
-	
-    
-	
 	/**
 	 * Karttan çekim işlemini yapan metod
 	 * @param ChargeParameters $param
@@ -123,13 +107,6 @@ class PaynetClient
 		$sonuc->fillFromJson($this->json_result);
 		return $sonuc;
 	}
-	
-	
-	
-	
-	
-
-	
 	
 	/**
 	 * 
@@ -145,11 +122,6 @@ class PaynetClient
 		return $sonuc;
 	}
 	
-		
-	
-	
-	
-	
 	/**
 	 * 
 	 * @param TransactionDetailParameters $param
@@ -163,15 +135,6 @@ class PaynetClient
 		return $sonuc;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	public function ListTransaction(TransactionListParameters $param)
 	{
 		$this->json_result = $this->LoadJson('v1/transaction/list', $param);
@@ -179,11 +142,6 @@ class PaynetClient
 		$sonuc->fillFromJson($this->json_result);
 		return $sonuc;
 	}
-	
-	
-	
-	
-	
 	
 	/**
 	 * Mail veya sms ile ödeme seçemekleri için link üreten servis...
@@ -198,9 +156,6 @@ class PaynetClient
 		return $sonuc;
 	}
 	
-	
-	
-	
 	/**
 	 * Oran tablosunu getiren servis
 	 * @param RatioParameters $params
@@ -214,9 +169,6 @@ class PaynetClient
 		return $sonuc;
 	}
 	
-	
-	
-	
 	/**
 	 * İşlemi işaretleyen servis
 	 * @param MarkTransferParameters $params
@@ -228,16 +180,6 @@ class PaynetClient
 		return $this->json_result->code == "1";
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 	/**
 	 * 
 	 * @param ReversedRequestParameters $params
@@ -251,17 +193,6 @@ class PaynetClient
 		return $sonuc;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	/**
 	 * 
 	 * @param AutologinParameters $params
@@ -274,15 +205,6 @@ class PaynetClient
 		$sonuc->fillFromJson($this->json_result);
 		return $sonuc;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	/**
 	 * Bir işlem sonucunda sunucudan alınan JSON nesnesini table olarak ekrana yazdırır
@@ -306,9 +228,6 @@ class PaynetClient
 			echo "Sonuç değişkeni boş";
 	}
 	
-	
-	
-	
 	/**
 	 *Bir servisin cevap olarak gönderdiği Json nesnesini düz yazı olarak ekrana yazar. 
 	 */
@@ -316,17 +235,7 @@ class PaynetClient
 	{
 		echo json_encode($this->json_result);
 	}
-	
-	
-	
-	
-	
-	
 }
-
-
-
-
 
 /**
  * Suncudan dönen cevaplar için base sınıfı
@@ -338,17 +247,6 @@ class Result extends fillFromJson_
 	public $code;
 	public $message;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 /**
  * FillFromJson metodunu diğer sınıflara eklemek için 
@@ -395,8 +293,6 @@ class fillFromJson_
 		}
 	}
 }
-
-
 
 /**
 * Three3DPayment servisi için request parametreleri
@@ -481,9 +377,6 @@ class ChargeParameters
 	public $transaction_type = 1;
 }
 
-
-
-
 /**
  * ChargePost metodundan dönecek sonuç nesne için
  * @author proje
@@ -523,9 +416,6 @@ class ChargeResponse extends Result
 	public $ratio;
 }
 
-
-
-
 /**
  * GetRatios() metodunun parametreleri
  * @author proje
@@ -539,9 +429,6 @@ class RatioParameters
 	public $addcommission_to_amount = false;
 }
 
-
-
-
 /**
  * GetRatios() metodunun dönüş sınıfı
  * @author proje
@@ -552,8 +439,6 @@ class RatioResponse extends Result
 {
     public $data = array('Banks');//banka  listesi
 }
-
-
 
 /**
  * Banks sınıfının ratio dizinin elemanları
@@ -574,8 +459,6 @@ class Ratios extends fillFromJson_
     public $desc;
 }
 
-
-
 /**
  * RatioResponse sınıfındaki data dizisinin elemanları
  * @author proje
@@ -589,10 +472,6 @@ class Banks extends fillFromJson_
     public $ratio = array('Ratios');
 }
 
-
-
-
-
 /**
  * CheckTransaction metoduna gönderilecek paramatre
  * @author proje
@@ -603,9 +482,6 @@ class CheckTransactionParameters
 	public $xact_id;
 	public $reference_no;
 }
-
-
-
 
 /**
  * CheckTransaction metodunun sonucunda dönecek sınıf
@@ -642,9 +518,6 @@ class CheckTransactionResponse extends Result
 	public $agent_reference;
 }
 
-
-
-
 /**
  * GetTransactionDetail metodunun parametreleri
  * @author proje
@@ -656,9 +529,6 @@ class TransactionDetailParameters
 	public $reference_no;
 }
 
-
-
-
 /**
  * GetTransactionDetail metodunun dönüşü
  * @author proje
@@ -668,9 +538,6 @@ class TransactionDetailResponse extends Result
 {
 	public $Data = array('TransactionDetail');
 }
-
-
-
 
 /**
  * GetTransactionDetail metodunun dönüşündeki satırlar
@@ -729,10 +596,6 @@ class TransactionDetail extends Result
 	
 }
 
-
-
-
-
 /**
  * ListTransaction metodunun parametreleri
  * @author proje
@@ -749,7 +612,7 @@ class TransactionListParameters
 	public $ending_before;
 	public $starting_after;
 	
-	public function TransactionListParameters()
+	public function __construct()
 	{
 		$this->agent_id = "";
 		$this->bank_id = "";
@@ -762,9 +625,6 @@ class TransactionListParameters
 	}
 	
 }
-
-
-
 
 /**
  * ListTransaction sonucunda dönecek nesne
@@ -787,9 +647,6 @@ class TransactionListResponse extends fillFromJson_
 
 	public $Data = array('TransactionListData');
 }
-
-
-
 
 /**
  * TransactionListResponse'daki data dizisinin satırlar
@@ -871,8 +728,6 @@ class TransactionListData extends fillFromJson_
 
 }
 
-
-
 /**
  * MarkTransferred() metodu için parametreler
  * @author proje
@@ -886,9 +741,6 @@ class MarkTransferParameters
 	public $currency;
 	public $exchange_rate;
 }
-
-
-
 
 /**
  * CreateMailOrder() metodunun parametreleri
@@ -918,8 +770,7 @@ class MailOrderParameters
 	public $send_confirmation_mail;
 	public $multi_payment;
 	
-	
-	public function MailOrderParameters()
+	public function __construct()
 	{
 		$this->pos_type = 5;
 		$this->addcomission_to_amount = false;
@@ -936,11 +787,6 @@ class MailOrderParameters
 	}
 }
 
-
-
-
-
-
 /**
  * CreateMailOrder() metodunun sonucu
  * @author proje
@@ -950,11 +796,6 @@ class MailOrderResult extends Result
 {
 	public $url;
 }
-
-
-
-
-
 
 /**
  * ReversedRequest() için parametreler
@@ -968,10 +809,6 @@ class ReversedRequestParameters
 	public $succeedUrl;
 }
 
-
-
-
-
 /**
  * ReversedRequest() metodundan dönecek nesne, bu nesne Result ile aynı içerikli olduğu için (şimdilik) ekleme yapmaya gerek yok
  * @author proje
@@ -980,15 +817,6 @@ class ReversedRequestParameters
 class ReversedRequestResponse extends Result
 {
 }
-
-
-
-
-
-
-
-
-
 
 /**
  * Autologin() metodunun parametresi
@@ -1001,14 +829,6 @@ class AutologinParameters
 	public $agentID;
 }
 
-
-
-
-
-
-
-
-
 /**
  * Autologin() metodunun dönüş nesnesi
  * @author proje
@@ -1019,14 +839,6 @@ class AutologinResult extends Result
 	public $url;
 }
 
-
-
-
-
-
-
-
-
 /**
  * Hata oluştuğunda dönecek nesne
  * @author proje
@@ -1035,10 +847,5 @@ class AutologinResult extends Result
 class PaynetException extends Exception
 {
 }
-
-
-
-
-
 
 ?>
