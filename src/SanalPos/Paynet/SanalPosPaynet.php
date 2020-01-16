@@ -101,6 +101,25 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
         return  ['status' => $Code=='0', 'message'=>$Message, 'html'=>$Html];
     }
 
+    /**
+    * @return mixed
+    */
+    public function getTaksit($KartNumara, $Tutar)
+    {
+        $isTest = ($this->mode == 'TEST') ? true:false;
+        $paynet = new PaynetClient($this->sec_key, $isTest);
+        
+        $ratioParams 				= new RatioParameters();
+        $ratioParams->bin 	        = $KartNumara;
+        $ratioParams->amount 	    = $Tutar;
+        $ratioParams->addcommission_to_amount 	= $this->komisyon?:false;
+
+        //Servisi çalıştır
+        $sonuc = $paynet->GetRatios($ratioParams);
+			
+        return  $sonuc;
+    }
+
     public function postAuth($orderId)
     {
     }
