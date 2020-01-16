@@ -10,7 +10,7 @@ namespace SanalPos;
 
 interface SanalPosInterface
 {
-    public function setCard($number, $expMonth, $expYear, $cvv);
+    public function setCard($number, $expMonth, $expYear, $cvv, $name);
 
     public function setOrder($orderId, $customerEmail, $total, $taksit = '', $extra = []);
 
