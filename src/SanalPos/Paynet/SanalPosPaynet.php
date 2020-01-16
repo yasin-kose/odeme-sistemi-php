@@ -126,7 +126,7 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
         //Servisi çalıştır
         $sonuc = $paynet->GetRatios($ratioParams);
 			
-        return  $sonuc;
+        return  (array) $sonuc;
     }
 
     public function postAuth($orderId)
