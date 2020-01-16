@@ -29,10 +29,10 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
         $this->is3D = $is3D==1;
     }
 
-
     public function getServer() 
     {
     }
+
     /**
      * @return mixed
      */
@@ -42,9 +42,9 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
             return $this->pay3d();
         }
         $isTest = ($this->mode == 'TEST') ? true:false;
-        $paynet = new PaynetClient($this->sec_key, $isTest);
+        $paynet = new \PaynetClient($this->sec_key, $isTest);
         
-        $paymentParams 				    = new PaymentParameters();
+        $paymentParams 				    = new \PaymentParameters();
         $paymentParams->amount 	        = $this->order['total'];
         $paymentParams->reference_no 	= $this->order['orderId'];
         $paymentParams->card_holder 	= $this->card['name'];
@@ -68,7 +68,7 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
         $BankaHata			= $result->bank_error_message;
 
         if($Durum and $this->order['email']){
-            $SlipParams 				= new SlipParameters();
+            $SlipParams 				= new \SlipParameters();
             $SlipParams->xact_id 	 	= $XSiparisID;
             $SlipParams->email 			= $this->order['email'];
             $SlipParams->send_mail		= true;
@@ -85,7 +85,7 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
         $isTest = ($this->mode == 'TEST') ? true:false;
         $paynet = new PaynetClient($this->sec_key, $isTest);
         
-        $paymentParams 				= new Three3DPaymentParameters();
+        $paymentParams 				    = new \Three3DPaymentParameters();
         $paymentParams->amount 	        = $this->order['total'];
         $paymentParams->reference_no 	= $this->order['orderId'];
         $paymentParams->card_holder 	= $this->card['name'];
@@ -116,9 +116,9 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
     public function getTaksit($KartNumara, $Tutar=0)
     {
         $isTest = ($this->mode == 'TEST') ? true:false;
-        $paynet = new PaynetClient($this->sec_key, $isTest);
+        $paynet = new \PaynetClient($this->sec_key, $isTest);
         
-        $ratioParams 				= new RatioParameters();
+        $ratioParams 				= new \RatioParameters();
         $ratioParams->bin 	        = $KartNumara;
         $ratioParams->amount 	    = $Tutar;
         $ratioParams->addcommission_to_amount 	= $this->komisyon?:false;
@@ -157,9 +157,9 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
     {
 
         $isTest = ($this->mode == 'TEST') ? true:false;
-        $paynet = new PaynetClient($this->sec_key, $isTest);
+        $paynet = new \PaynetClient($this->sec_key, $isTest);
         
-        $chargeParams 				= new ChargeParameters();
+        $chargeParams 				= new \ChargeParameters();
         $chargeParams->session_id 	= $postData["session_id"];
         $chargeParams->token_id 	= $postData["token_id"];
 
@@ -172,7 +172,7 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
         $EMail				= $result->email?$result->email:'';
 
         if($Durum and $EMail){
-            $SlipParams 				= new SlipParameters();
+            $SlipParams 				= new \SlipParameters();
             $SlipParams->xact_id 	 	= $XSiparisID;
             $SlipParams->email 			= $EMail;
             $SlipParams->send_mail		= true;
