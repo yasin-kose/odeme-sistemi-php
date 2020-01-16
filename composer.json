@@ -16,7 +16,8 @@
     "autoload": {
         "files": [
             "posnet/PosnetXML/posnet.php",
-            "posnet/PosnetOOS/posnet_oos.php"
+            "posnet/PosnetOOS/posnet_oos.php",
+            "PaynetClass/PaynetClass.php"
         ],
         "psr-0": {
             "SanalPos": "src/",
