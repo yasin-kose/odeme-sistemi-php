@@ -56,7 +56,6 @@ class SanalPosVakifbank extends SanalPosBase implements SanalPosInterface, Sanal
         } elseif ($this->bank === 'vakifbank_3d') {
             $this->server = $this->mode == 'TEST' ? 'https://'.$this->testServer3d : 'https://'.$this->server;
         }
-
         return $this->server;
     }
 

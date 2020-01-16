@@ -29,6 +29,10 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
         $this->is3D = $is3D==1;
     }
 
+
+    public function getServer()
+    {
+    }
     /**
      * @return mixed
      */
