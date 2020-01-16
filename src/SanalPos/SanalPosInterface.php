@@ -24,6 +24,8 @@ interface SanalPosInterface
 
     public function pay($pre = false, $successUrl, $failureUrl);
 
+    public function getTaksit($KartNumara, $Tutar=0);
+
     public function postAuth($orderId);
 
     public function refund($orderId, $amount = null);

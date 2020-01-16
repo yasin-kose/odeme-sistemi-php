@@ -15,8 +15,9 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
     protected $komisyon;
     protected $taksitli;
     protected $return_url;
+    protected $is3D;
     
-    public function __construct($pub_key, $sec_key, $firma_kod, $taksit_oran, $komisyon, $taksitli, $return_url)
+    public function __construct($pub_key, $sec_key, $firma_kod, $taksit_oran, $komisyon, $taksitli, $is3D, $return_url)
     {
         $this->pub_key = $pub_key;
         $this->sec_key = $sec_key;
@@ -25,13 +26,17 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
         $this->komisyon = $komisyon;
         $this->taksitli = $taksitli;
         $this->return_url = $return_url;
+        $this->is3D = $is3D==1;
     }
 
     /**
      * @return mixed
      */
-    public function pay()
+    public function pay($pre = false, $successUrl = null, $failureUrl = null)
     {
+        if ($this->is3D) {
+            return $this->pay3d();
+        }
         $isTest = ($this->mode == 'TEST') ? true:false;
         $paynet = new PaynetClient($this->sec_key, $isTest);
         
@@ -104,7 +109,7 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
     /**
     * @return mixed
     */
-    public function getTaksit($KartNumara, $Tutar)
+    public function getTaksit($KartNumara, $Tutar=0)
     {
         $isTest = ($this->mode == 'TEST') ? true:false;
         $paynet = new PaynetClient($this->sec_key, $isTest);
