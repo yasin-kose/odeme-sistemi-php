@@ -232,6 +232,10 @@ class SanalPosEst extends SanalPosBase implements SanalPosInterface, SanalPos3DI
         return $response;
     }
 
+    public function getTaksit($KartNumara, $Tutar=0)
+    {
+    }
+
     /**
      * 3d formunu ekrana bastıktan sonra kullanıcı sms doğrulamasını gireceği alana yönlendirilir.
      * SanalPos3DResponseInterface dosyasını kontrol edin.

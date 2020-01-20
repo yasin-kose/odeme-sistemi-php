@@ -125,6 +125,10 @@ class SanalPosGaranti extends SanalPosBase implements SanalPosInterface
         return $this->send();
     }
 
+    public function getTaksit($KartNumara, $Tutar=0)
+    {
+    }
+
     public function send()
     {
         $ch = curl_init();

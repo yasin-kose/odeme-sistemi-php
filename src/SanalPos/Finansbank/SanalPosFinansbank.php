@@ -81,6 +81,10 @@ class SanalPosFinansbank extends SanalPosBase implements SanalPosInterface, Sana
     {
     }
 
+    public function getTaksit($KartNumara, $Tutar=0)
+    {
+    }
+
     /**
     * @param bool        $pre     
     * @param null|string $successUrl yalnızca 3d ödeme yapılacaksa gerekli

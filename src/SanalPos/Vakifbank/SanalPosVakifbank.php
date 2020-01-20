@@ -123,6 +123,10 @@ class SanalPosVakifbank extends SanalPosBase implements SanalPosInterface, Sanal
     {
     }
 
+    public function getTaksit($KartNumara, $Tutar=0)
+    {
+    }
+
     public function send()
     {
         $curl = curl_init();
