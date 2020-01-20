@@ -84,10 +84,10 @@ class PaynetClient
 	
 	/**
 	* Karttan para çekim işlemi yapan metod
-	* @param ChargeParameters $param
+	* @param PaymentParameters $param
 	* @return ChargeResponse
 	*/
-	public function PaymentPost(ChargeParameters $param)
+	public function PaymentPost(PaymentParameters $param)
 	{
 		$this->json_result = $this->LoadJson('v2/transaction/payment',$param);
 		$sonuc = new ChargeResponse();

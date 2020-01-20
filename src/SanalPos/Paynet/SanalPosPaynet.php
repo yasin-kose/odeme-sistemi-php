@@ -26,7 +26,7 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
         $this->komisyon = $komisyon;
         $this->taksitli = $taksitli;
         $this->return_url = $return_url;
-        $this->is3D = $is3D==1;
+        $this->is3D = ($is3D==true);
     }
 
     public function getServer() 
@@ -34,20 +34,20 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
     }
 
     /**
-     * @return mixed
-     */
+    * @return mixed
+    */
     public function pay($pre = false, $successUrl = null, $failureUrl = null)
     {
         if ($this->is3D) {
             return $this->pay3d();
         }
-        $isTest = ($this->mode == 'TEST') ? true:false;
-        $paynet = new \PaynetClient($this->sec_key, $isTest);
+			
+        $isLive = ($this->mode == 'TEST') ?  false:true;
+        $paynet = new \PaynetClient($this->sec_key, $isLive);
         
         $paymentParams 				    = new \PaymentParameters();
         $paymentParams->amount 	        = $this->order['total'];
         $paymentParams->reference_no 	= $this->order['orderId'];
-        $paymentParams->card_holder 	= $this->card['name'];
         $paymentParams->pan 	        = $this->card['number'];
         $paymentParams->month 	        = $this->card['month'];
         $paymentParams->year 	        = $this->card['year2'];
@@ -57,7 +57,7 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
         if($this->taksitli){
             $paymentParams->instalment 	    = $this->order['taksit']?:0;
         }
-        $paymentParams->add_commission 	= $this->komisyon?:false;
+        $paymentParams->add_commission 	= $this->komisyon?true:false;
         $paymentParams->ratio_code 	    = $this->taksit_oran;
         $paymentParams->agent_id 	    = $this->firma_kod;
 
@@ -82,23 +82,22 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
     */
     public function pay3d()
     {
-        $isTest = ($this->mode == 'TEST') ? true:false;
-        $paynet = new PaynetClient($this->sec_key, $isTest);
+        $isLive = ($this->mode == 'TEST') ? false:true;
+        $paynet = new \PaynetClient($this->sec_key, $isLive);
         
         $paymentParams 				    = new \Three3DPaymentParameters();
         $paymentParams->amount 	        = $this->order['total'];
         $paymentParams->reference_no 	= $this->order['orderId'];
-        $paymentParams->card_holder 	= $this->card['name'];
         $paymentParams->pan 	        = $this->card['number'];
         $paymentParams->month 	        = $this->card['month'];
         $paymentParams->year 	        = $this->card['year2'];
         $paymentParams->cvc 	        = $this->card['cvv'];
         $paymentParams->card_holder_mail= $this->order['email'];
-        $paymentParams->description 	= $this->order['extra']['desc'];
+        $paymentParams->description 	= $this->order['extra']['desc']=='undefined'?'':$this->order['extra']['desc'];
         if($this->taksitli){
             $paymentParams->instalment 	    = $this->order['taksit']?:0;
         }
-        $paymentParams->add_commission 	= $this->komisyon?:false;
+        $paymentParams->add_commission 	= $this->komisyon?true:false;
         $paymentParams->ratio_code 	    = $this->taksit_oran;
         $paymentParams->agent_id 	    = $this->firma_kod;
         $paymentParams->return_url 	    = $this->return_url;
@@ -107,6 +106,7 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
         $Html			= $result->html_content;
         $Code			= $result->code;
         $Message		= $result->message;
+		
         return  ['status' => $Code=='0', 'message'=>$Message, 'html'=>$Html];
     }
 
@@ -115,8 +115,8 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
     */
     public function getTaksit($KartNumara, $Tutar=0)
     {
-        $isTest = ($this->mode == 'TEST') ? true:false;
-        $paynet = new \PaynetClient($this->sec_key, $isTest);
+        $isLive = ($this->mode == 'TEST') ? false:true;
+        $paynet = new \PaynetClient($this->sec_key, $isLive);
         
         $ratioParams 				= new \RatioParameters();
         $ratioParams->bin 	        = $KartNumara;
@@ -142,22 +142,22 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
     }
 
     /**
-     * 3d formunu ekrana bastıktan sonra kullanıcı sms doğrulamasını gireceği alana yönlendirilir.
-     * SanalPos3DResponseInterface dosyasını kontrol edin.
-     *
-     * SMS kodunu girdikten sonra $successUrl ile belirlediğimiz adrese yönlendirilir.
-     * İşte bu noktada, gelen post datayı kontrol ettikten sonra, çekim işlemini tamamlamak için
-     * bu fonksiyon çalıştırılır.
-     *
-     * @param array $postData
-     *
-     * @return mixed
-     */
+    * 3d formunu ekrana bastıktan sonra kullanıcı sms doğrulamasını gireceği alana yönlendirilir.
+    * SanalPos3DResponseInterface dosyasını kontrol edin.
+    *
+    * SMS kodunu girdikten sonra $successUrl ile belirlediğimiz adrese yönlendirilir.
+    * İşte bu noktada, gelen post datayı kontrol ettikten sonra, çekim işlemini tamamlamak için
+    * bu fonksiyon çalıştırılır.
+    *
+    * @param array $postData
+    *
+    * @return mixed
+    */
     public function provision3d(array $postData)
     {
 
-        $isTest = ($this->mode == 'TEST') ? true:false;
-        $paynet = new \PaynetClient($this->sec_key, $isTest);
+        $isLive = ($this->mode == 'TEST') ?false:true;
+        $paynet = new \PaynetClient($this->sec_key, $isLive);
         
         $chargeParams 				= new \ChargeParameters();
         $chargeParams->session_id 	= $postData["session_id"];
@@ -178,6 +178,6 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
             $SlipParams->send_mail		= true;
             $SlipResult		 			= $paynet->SlipPost($SlipParams);
         }
-        return  ['status' => $Durum, 'message'=>$Message];
+        return  ['status' => $Durum, 'message'=>$BankaHata];
     }
 }
