@@ -426,7 +426,9 @@ class RatioParameters
 	public $pos_type = 5;
 	public $bin;
 	public $amount;
-	public $addcommission_to_amount = false;
+	public $agent_id;
+	public $ratio_code;
+	public $addcomission_to_amount = false;
 }
 
 /**

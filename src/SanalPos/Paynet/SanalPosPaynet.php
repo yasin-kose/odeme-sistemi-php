@@ -57,7 +57,7 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
         if($this->taksitli){
             $paymentParams->instalment 	    = $this->order['taksit']?:0;
         }
-        $paymentParams->add_commission 	= $this->komisyon?true:false;
+        $paymentParams->add_commission 	= $this->komisyon==1?true:false;
         $paymentParams->ratio_code 	    = $this->taksit_oran;
         $paymentParams->agent_id 	    = $this->firma_kod;
 
@@ -97,9 +97,13 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
         if($this->taksitli){
             $paymentParams->instalment 	    = $this->order['taksit']?:0;
         }
-        $paymentParams->add_commission 	= $this->komisyon?true:false;
-        $paymentParams->ratio_code 	    = $this->taksit_oran;
-        $paymentParams->agent_id 	    = $this->firma_kod;
+        $paymentParams->add_commission 	= $this->komisyon==1?true:false;
+        if($this->taksit_oran){
+            $paymentParams->ratio_code = $this->taksit_oran;
+        }
+        if($this->firma_kod){
+            $paymentParams->agent_id  = $this->firma_kod;
+        }
         $paymentParams->return_url 	    = $this->return_url;
 
         $result 		= $paynet->There3DPaymentPost($paymentParams);
@@ -115,18 +119,25 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
     */
     public function getTaksit($KartNumara, $Tutar=0)
     {
+        if(!$this->taksitli){
+            return [];
+        }
         $isLive = ($this->mode == 'TEST') ? false:true;
         $paynet = new \PaynetClient($this->sec_key, $isLive);
-        
         $ratioParams 				= new \RatioParameters();
         $ratioParams->bin 	        = $KartNumara;
         $ratioParams->amount 	    = $Tutar;
-        $ratioParams->addcommission_to_amount 	= $this->komisyon?:false;
-
+        if($this->firma_kod){
+            $ratioParams->agent_id  = $this->firma_kod;
+        }
+        if($this->taksit_oran){
+            $ratioParams->ratio_code = $this->taksit_oran;
+        }
+        $ratioParams->addcomission_to_amount 	= $this->komisyon==1?true:false;
         //Servisi çalıştır
         $sonuc = $paynet->GetRatios($ratioParams);
 			
-        return  $sonuc;
+        return  $sonuc->data[0];
     }
 
     public function postAuth($orderId)
