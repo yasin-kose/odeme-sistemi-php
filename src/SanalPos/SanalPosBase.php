@@ -25,6 +25,7 @@ class SanalPosBase
         $this->card['number'] = $number;
         $this->card['month'] = str_pad($expMonth, 2, 0, STR_PAD_LEFT);
         $this->card['year'] = str_pad($expYear, 2, 0, STR_PAD_LEFT);
+        $this->card['year2'] = $expYear;
         $this->card['cvv'] = $cvv;
     }
 
