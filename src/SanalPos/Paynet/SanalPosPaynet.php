@@ -26,7 +26,7 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
         $this->komisyon = $komisyon;
         $this->taksitli = $taksitli;
         $this->return_url = $return_url;
-        $this->is3D = ($is3D==true);
+        $this->is3D = ($is3D==1);
     }
 
     public function getServer() 
