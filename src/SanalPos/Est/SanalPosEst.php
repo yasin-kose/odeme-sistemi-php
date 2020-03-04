@@ -81,7 +81,7 @@ class SanalPosEst extends SanalPosBase implements SanalPosInterface, SanalPos3DI
             $rnd = microtime();    //Tarih veya her seferinde degisen bir deger güvenlik amaçli
             $storekey = $this->storeKey;  //isyeri anahtari
 
-            $hashstr = $this->clientId.$this->order['orderId'].$this->order['total'].$successUrl.$failureUrl.($this->order['taksit']?:'').$rnd.$storekey;
+            $hashstr = $this->clientId.$this->order['orderId'].$this->order['total'].$successUrl.$failureUrl.$rnd.$storekey;
             $hash = base64_encode(pack('H*', sha1($hashstr)));
 
             $x['storetype'] = $dom->createElement('storetype', '3d');
@@ -94,9 +94,6 @@ class SanalPosEst extends SanalPosBase implements SanalPosInterface, SanalPos3DI
             $x['pan'] = $dom->createElement('pan', $this->card['number']);
             $x['Ecom_Payment_Card_ExpDate_Year'] = $dom->createElement('Ecom_Payment_Card_ExpDate_Year', $this->card['year']);
             $x['Ecom_Payment_Card_ExpDate_Month'] = $dom->createElement('Ecom_Payment_Card_ExpDate_Month', $this->card['month']);
-            if($this->order['taksit']){
-                $x['taksit'] = $dom->createElement('Taksit', $this->order['taksit']);
-            }
             $x['cv2'] = $this->card['cvv'];
             $x['cardType'] = $dom->createElement('cardType', ($this->card['number'][0] === 4) ? 1 : 2);
             $x['amount'] = $dom->createElement('amount', $this->order['total']);
