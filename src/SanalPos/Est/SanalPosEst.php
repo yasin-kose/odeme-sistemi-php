@@ -287,12 +287,12 @@ class SanalPosEst extends SanalPosBase implements SanalPosInterface, SanalPos3DI
         $expires = $postData['Ecom_Payment_Card_ExpDate_Month'].'/'.$postData['Ecom_Payment_Card_ExpDate_Year']; //Kredi Karti son kullanim tarihi mm/yy formatindan olmali
         $cv2 = $postData['cv2'] ?? $this->card['cvv'];                     //Kart guvenlik kodu
         $tutar = $postData['amount'];                // Islem tutari
-        $taksit = $this->order['taksit'] ? $this->order['taksit'] : '';           			//Taksit sayisi Pesin satislarda bos gonderilmelidir, "0" gecerli sayilmaz.
+        $taksit = $postData['taksit']>1 ? $postData['taksit'] : '';           			//Taksit sayisi Pesin satislarda bos gonderilmelidir, "0" gecerli sayilmaz.
         $oid = $postData['oid'];			//Siparis numarasy her islem icin farkli olmalidir ,
         //bos gonderilirse sistem bir siparis numarasi üretir.
 
         $lip = $this->getIpAddress();  	//Son kullanici IP adresi
-        $email = $this->order['email'];  				//Email
+        $email =$postData['email'] ? $postData['email'] : 'msn@msn.com';  		  				//Email
 		
         //Provizyon alinamadigi durumda taksit sayisi degistirilirse sipari numarasininda
         //degistirilmesi gerekir.
