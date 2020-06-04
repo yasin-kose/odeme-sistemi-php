@@ -10,8 +10,7 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "mockery/mockery": "dev-master@dev"
+        "php": ">=5.4.0"
     },
     "autoload": {
         "files": [
