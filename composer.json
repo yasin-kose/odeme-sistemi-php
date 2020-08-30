@@ -6,7 +6,9 @@
     "authors": [
         {
             "name": "Yasin Köse",
-            "email": "yasin.kose@outlook.com.tr"
+            "email": "yasin.kose@outlook.com.tr",
+            "homepage": "http://ankapix.com",
+            "role": "Developer"
         }
     ],
     "require": {
