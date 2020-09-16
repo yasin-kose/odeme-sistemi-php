@@ -108,7 +108,7 @@ class SanalPosPaynet extends SanalPosBase implements SanalPosInterface, SanalPos
 
         $result 		= $paynet->There3DPaymentPost($paymentParams);
         $Html			= $result->html_content;
-        $Code			= $result->code;
+        $Code			= $result->code; 
         $Message		= $result->message;
 		
         return  ['status' => $Code=='0', 'message'=>$Message, 'html'=>$Html];
